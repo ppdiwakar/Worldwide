@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: payment-gateway-ingress
+  namespace: payment-gateway-prod
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:ACCOUNT_ID:certificate/CERT_ID
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
+    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:us-east-1:ACCOUNT_ID:regional/webacl/payment-waf/ID
+    alb.ingress.kubernetes.io/load-balancer-attributes: routing.http.drop_invalid_header_fields.enabled=true
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "15"
+spec:
+  rules:
+    - host: api.payments.worldwide.com
+      http:
+        paths:
+          - path: /v1/
+            pathType: Prefix
+            backend:
+              service:
+                name: payment-gateway-svc
+                port:
+                  number: 80
+          - path: /actuator/health
+            pathType: Exact
+            backend:
+              service:
+                name: payment-gateway-svc
+                port:
+                  number: 80

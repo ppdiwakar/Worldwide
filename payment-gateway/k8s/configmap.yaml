@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payment-gateway-config
+  namespace: payment-gateway-prod
+data:
+  DB_HOST: "payment-gateway-db.cluster-xyz.us-east-1.rds.amazonaws.com"
+  DB_PORT: "5432"
+  DB_NAME: "paymentdb"
+  DB_USER: "pguser"
+  REDIS_HOST: "payment-cache.xyz.ng.0001.use1.cache.amazonaws.com"
+  REDIS_PORT: "6379"
+  KAFKA_BROKERS: "b-1.payment-msk.xyz.kafka.us-east-1.amazonaws.com:9092,b-2.payment-msk.xyz.kafka.us-east-1.amazonaws.com:9092"
+  ENVIRONMENT: "production"
+  FRAUD_SCORE_THRESHOLD: "70"

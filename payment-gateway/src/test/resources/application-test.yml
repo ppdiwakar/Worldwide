@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;DEFAULT_NULL_ORDERING=HIGH
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: false
+  data:
+    redis:
+      host: localhost
+      port: 6370   # non-default to avoid conflicts; mock in tests
+  kafka:
+    bootstrap-servers: localhost:9093
+
+payment:
+  api:
+    master-key: test-master-key
+  fraud:
+    score-threshold: 70
+  idempotency:
+    ttl-seconds: 3600
+
+logging:
+  level:
+    com.worldwide.paymentgateway: DEBUG
